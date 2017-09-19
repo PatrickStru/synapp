@@ -12,7 +12,7 @@
     <color name="LightYellow">#FFFFE0</color>
     <color name="Yellow">#FFFF00</color>
     <color name="Snow">#FFFAFA</color>
-    <color name="FloralWhite">#FFFAF0</color>
+    <color name="FloralWhite">#fffaf0</color>
     <color name="LemonChiffon">#FFFACD</color>
     <color name="Cornsilk">#FFF8DC</color>
     <color name="Seashell">#FFF5EE</color>
@@ -85,7 +85,7 @@
     <color name="GreenYellow">#ADFF2F</color>
     <color name="LightBlue">#ADD8E6</color>
     <color name="DarkGray">#A9A9A9</color>
-    <color name="Brown">#A52A2A</color>
+    <color name="Brown">#a52a2a</color>
     <color name="Sienna">#A0522D</color>
     <color name="YellowGreen">#9ACD32</color>
     <color name="DarkOrchid">#9932CC</color>

@@ -4,14 +4,21 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -26,13 +33,14 @@ public class MainActivity extends AppCompatActivity {
     */
     private SearchView searchView = null;
 
-    private TextView tvAlt1 = null;
-    private TextView tvAlt2 = null;
-    private TextView tvAlt3 = null;
 
-    private TextView tvAuthor = null;
-    private TextView tvCapital = null;
-    private TextView tvDescription = null;
+    private ListView listView = null;
+
+    //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
+    ArrayList<String> listItems = new ArrayList<String>();
+
+    //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
+    ArrayAdapter<String> adapter = null;
 
     private String TAG = "SYNAPP";
 
@@ -53,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        tvAuthor = (TextView) findViewById(R.id.tvAuthor);
-        tvCapital = (TextView) findViewById(R.id.tvCapital);
-        tvDescription = (TextView) findViewById(R.id.tvDescription);
+        listView = (ListView) findViewById(R.id.listviewTimeInterval);
 
-        tvAlt1 = (TextView) findViewById(R.id.tvAlt1);
-        tvAlt2 = (TextView) findViewById(R.id.tvAlt2);
-        tvAlt3 = (TextView) findViewById(R.id.tvAlt3);
+        // Create ArrayAdapter using the planet list.
+        adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.simplerow, listItems);
+
+        // Set the ArrayAdapter as the ListView's adapter.
+        listView.setAdapter(adapter);
 
         searchView = (SearchView) findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
@@ -99,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             Log.i(TAG, "onPostExecute");
-            tvCapital.setText(synonym);
+
+           adapter.notifyDataSetChanged();
         }
 
         @Override
@@ -140,8 +149,18 @@ public class MainActivity extends AppCompatActivity {
             androidHttpTransport.call(SOAP_ACTION, envelope);
             //Get the response
             Object response = (Object) envelope.getResponse();
+            //SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+            //SoapObject response = (SoapObject) envelope.getResponse();
 
-            synonym = response.toString();
+            //clear list items for new synonym
+            listItems.clear();
+
+            Log.e(TAG, response.toString());
+
+            JSONArray jsonArray = new JSONArray(response.toString());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                listItems.add(jsonArray.getString(i));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
